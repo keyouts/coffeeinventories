@@ -1,4 +1,5 @@
   let inventory = JSON.parse(localStorage.getItem('coffeeInventory')) || [];
+    let editingIndex = null;
 
     function saveInventory() {
       localStorage.setItem('coffeeInventory', JSON.stringify(inventory));
@@ -16,7 +17,7 @@
       errorDiv.style.display = 'none';
     }
 
-    function addItem() {
+    function addOrUpdateItem() {
       const name = document.getElementById('coffeeName').value.trim();
       const roast = document.getElementById('roastLevel').value;
       const qty = parseInt(document.getElementById('quantity').value.trim(), 10);
@@ -29,20 +30,45 @@
       }
 
       clearError();
-      inventory.push({ name, roast, qty, date, caffeine });
+
+      const coffee = { name, roast, qty, date, caffeine };
+
+      if (editingIndex !== null) {
+        inventory[editingIndex] = coffee;
+        editingIndex = null;
+      } else {
+        inventory.push(coffee);
+      }
+
       saveInventory();
       renderInventory();
+      resetForm();
+    }
 
-      document.getElementById('coffeeName').value = '';
-      document.getElementById('quantity').value = '';
-      document.getElementById('purchaseDate').value = '';
-      document.getElementById('caffeine').value = '';
+    function editItem(index) {
+      const item = inventory[index];
+      document.getElementById('coffeeName').value = item.name;
+      document.getElementById('roastLevel').value = item.roast;
+      document.getElementById('quantity').value = item.qty;
+      document.getElementById('purchaseDate').value = item.date;
+      document.getElementById('caffeine').value = item.caffeine;
+      editingIndex = index;
     }
 
     function deleteItem(index) {
       inventory.splice(index, 1);
       saveInventory();
       renderInventory();
+      resetForm();
+    }
+
+    function resetForm() {
+      document.getElementById('coffeeName').value = '';
+      document.getElementById('roastLevel').value = 'Light';
+      document.getElementById('quantity').value = '';
+      document.getElementById('purchaseDate').value = '';
+      document.getElementById('caffeine').value = '';
+      editingIndex = null;
     }
 
     function renderInventory() {
@@ -60,10 +86,15 @@
         const actions = document.createElement('div');
         actions.className = 'item-actions';
 
+        const editBtn = document.createElement('button');
+        editBtn.innerText = 'Edit';
+        editBtn.onclick = () => editItem(index);
+
         const deleteBtn = document.createElement('button');
         deleteBtn.innerText = 'Delete';
         deleteBtn.onclick = () => deleteItem(index);
 
+        actions.appendChild(editBtn);
         actions.appendChild(deleteBtn);
         div.appendChild(details);
         div.appendChild(actions);
@@ -72,3 +103,4 @@
     }
 
     renderInventory();
+
