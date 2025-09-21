@@ -7,11 +7,11 @@
 </head>
 <body>
   <div class="container" role="region" aria-labelledby="inventoryHeading">
-    <span class="aria-text" aria-label="Coffee Inventory Widget. Add and manage your coffee collection including caffeine tracking.">Coffee Inventory Widget</span>
+    <span class="aria-text" aria-label="Coffee Inventory Widget. Add, edit, and manage your coffee collection.">Coffee Inventory Widget</span>
 
     <h1 id="inventoryHeading">Coffee Inventory</h1>
 
-    <div class="controls" role="form" aria-label="Add new coffee">
+    <div class="controls" role="form" aria-label="Add or edit coffee">
       <label for="coffeeName" class="aria-text">Coffee Name</label>
       <input type="text" id="coffeeName" placeholder="Coffee Name" />
 
@@ -31,12 +31,15 @@
       <label for="caffeine" class="aria-text">Caffeine per serving (mg)</label>
       <input type="number" id="caffeine" placeholder="Caffeine (mg)" />
 
-      <button onclick="addItem()" aria-label="Add coffee to inventory">Add</button>
+      <button onclick="addOrUpdateItem()" aria-label="Add or update coffee in inventory">Save</button>
     </div>
 
     <div id="errorMsg" role="alert" aria-live="assertive" style="display: none;"></div>
     <div id="inventoryList" aria-label="Coffee inventory list"></div>
   </div>
+
+
+
     <script src="./script.js"></script>
 
 </body>
